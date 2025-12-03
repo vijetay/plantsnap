@@ -1,0 +1,101 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up | PlantSnap</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee') no-repeat center center/cover;
+    font-family: 'Trebuchet MS', sans-serif;
+  }
+
+
+  .signup-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 40px 50px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    width: 320px;
+    text-align: center;
+    animation: fadeIn 1.2s ease;
+  }
+
+  .signup-card h2 {
+    color: #1b5e20;
+    font-family: Georgia, serif;
+    margin-bottom: 25px;
+  }
+
+  .signup-card input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid #a5d6a7;
+    border-radius: 12px;
+    background: #f9fff9;
+  }
+
+  .signup-card button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #81c784, #388e3c);
+    color: white;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+  }
+
+  .signup-card button:hover {
+    background: linear-gradient(135deg, #388e3c, #2e7d32);
+  }
+
+  .signup-card p {
+    margin-top: 15px;
+    color: #2e7d32;
+  }
+
+  .signup-card a {
+    color: #1b5e20;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: scale(0.9);}
+    to {opacity: 1; transform: scale(1);}
+  }
+</style>
+</head>
+<body>
+  <div class="signup-card">
+    <h2>Create Your Garden Account</h2>
+    <form id="signupForm">
+      <input type="text" id="newUser" placeholder="Choose Username" required>
+      <input type="password" id="newPass" placeholder="Create Password" required>
+      <button type="submit">Sign Up</button>
+      <p>Already have an account? <a href="{% url 'loginuser' %}">Log In</a></p>
+
+    </form>
+    </div>
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const user = document.getElementById('newUser').value;
+      const pass = document.getElementById('newPass').value;
+      localStorage.setItem('user', user);
+      localStorage.setItem('pass', pass);
+      alert("Account created successfully! Please log in.");
+      window.location.href = "loginuser.html";
+    });
+  </script>
+</body>
+</html>

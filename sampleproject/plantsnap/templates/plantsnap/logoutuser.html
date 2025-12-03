@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logout | PlantSnap</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(to top right, #dcedc8, #a5d6a7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-family: 'Trebuchet MS', sans-serif;
+  }
+
+  .logout-card {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 30px;
+    padding: 40px 50px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    animation: fadeUp 1.2s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  .logout-card h2 {
+    color: #2e7d32;
+    font-family: Georgia, serif;
+  }
+
+  .logout-card p {
+    color: #4b6043;
+    margin-bottom: 20px;
+  }
+
+  .logout-card button {
+    background: linear-gradient(135deg, #81c784, #43a047);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 15px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .logout-card button:hover {
+    background: linear-gradient(135deg, #43a047, #2e7d32);
+  }
+
+  @keyframes fadeUp {
+    from {opacity: 0; transform: translateY(30px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+</style>
+</head>
+<body>
+  <div class="logout-card">
+    <h2>See You Soon!</h2>
+    <p>The garden awaits your return. Until then, let nature bloom.</p>
+    <button id="logoutBtn">Return to Login</button>
+  </div>
+
+  <script>
+    document.getElementById('logoutBtn').addEventListener('click', function(){
+      localStorage.removeItem("isLoggedIn");
+      window.location.href = "{% url 'loginuser' %}";
+    });
+  </script>
+</body>
+</html>
