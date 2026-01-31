@@ -1,0 +1,127 @@
+{% extends 'base_user.html' %}
+{% block content %}
+
+<style>
+.identify-bg {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        linear-gradient(rgba(255,255,255,0.22), rgba(255,255,255,0.22)),
+        url("https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=2400&q=90");
+    background-size: cover;
+    background-position: center;
+}
+
+.glass-card {
+    width: 70%;
+    max-width: 1000px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    padding: 40px;
+}
+
+.preview-img {
+    max-width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+</style>
+
+<div class="identify-bg">
+    <div class="glass-card">
+
+        <h3 class="fw-bold text-success mb-4 text-center">
+            🌿 Plant Disease Prediction
+        </h3>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <input type="file"
+                   name="plant_image"
+                   class="form-control mb-4"
+                   accept="image/*"
+                   onchange="previewImage(event)"
+                   required>
+
+            <!-- Preview + Save -->
+            <div class="row mb-4 align-items-center"
+                 id="previewSection"
+                 style="display:none;">
+
+                <div class="col-md-6 text-center">
+                    <img id="imagePreview" class="preview-img">
+                </div>
+
+                <div class="col-md-6 text-center">
+                    <button class="btn btn-success btn-lg px-5">
+                        💾 Predict Disease
+                    </button>
+                </div>
+
+            </div>
+        </form>
+
+        <hr class="my-4">
+
+        <!-- Plant Details (Single Source of Truth) -->
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center">
+                {% if saved_image %}
+                     <img src="{{ saved_image.image.url }}" class="preview-img mb-3">
+                     <form method="post" action="{% url 'delete_plant_dis_usr' saved_image.id %}">
+                            {% csrf_token %}
+                            <button class="btn btn-danger">
+                                🗑 Delete Image
+                            </button>
+                      </form>
+                {% endif %}
+            </div>
+
+            {% if disease %}
+
+            <div class="col-md-6">
+                <div class="card border-0 shadow p-4 alert {% if 'healthy' in disease|lower %}alert-success{% else %}alert-danger{% endif %}">
+                    <h4 class="fw-bold text-success mb-3">
+                        Plant Disease Details
+                    </h4>
+
+                     <p>
+                        <strong>Plant:</strong>
+                        {{ plant|default:"—" }}
+                    </p>
+
+                    <p>
+                        <strong>Disease Name:</strong>
+                        {{ disease|default:"—" }}
+                    </p>
+                    <!--
+                    <p class="text-muted">
+                        (ML prediction will appear here)
+                    </p>
+                    -->
+                </div>
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+function previewImage(event) {
+    const preview = document.getElementById('imagePreview');
+    const section = document.getElementById('previewSection');
+
+    preview.src = URL.createObjectURL(event.target.files[0]);
+    section.style.display = 'flex';
+}
+</script>
+
+{% endblock %}

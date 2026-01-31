@@ -1,0 +1,71 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-success">🌿 Plant Identifications</h3>
+
+        <form method="get" class="d-flex" style="max-width:400px;">
+            <input type="text"
+                   name="q"
+                   value="{{ query }}"
+                   class="form-control me-2"
+                   placeholder="Search plant / user / confidence">
+            <button class="btn btn-success">Search</button>
+        </form>
+    </div>
+
+    <div class="row g-4">
+
+        {% for plant in plants %}
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+
+                <img src="{{ plant.image.url }}"
+                     class="card-img-top"
+                     style="height:220px; object-fit:cover;">
+
+                <div class="card-body">
+                    <h5 class="fw-bold text-success">
+                        {{ plant.common_name|default:"Unknown" }}
+                    </h5>
+
+                    <p class="fst-italic text-muted mb-1">
+                        {{ plant.scientific_name|default:"—" }}
+                    </p>
+
+                    <p class="mb-1">
+                        <b>Confidence:</b> {{ plant.confidence }}%
+                    </p>
+
+                    <p class="mb-1">
+                        <b>User:</b>
+                        <span class="text-primary">
+                            {{ plant.reg.user.username }}
+                        </span>
+                    </p>
+
+                    <small class="text-muted">
+                        {{ plant.uploaded_at|date:"d M Y, h:i A" }}
+                    </small>
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center mt-5">
+            <div class="alert alert-light shadow-sm">
+                <h5 class="mb-1">No plant identifications found</h5>
+                <p class="text-muted mb-0">
+                    Try searching with a different keyword
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

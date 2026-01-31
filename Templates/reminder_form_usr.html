@@ -1,0 +1,36 @@
+{% extends 'base_user.html' %}
+{% block content %}
+
+<div class="container mt-4">
+    <h4 class="fw-bold text-success">
+        {% if reminder %}Edit{% else %}Add{% endif %} Reminder
+    </h4>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <input type="text"
+               name="title"
+               class="form-control mb-2"
+               placeholder="Reminder Title"
+               value="{{ reminder.title|default:'' }}" required>
+
+        <textarea name="description"
+                  class="form-control mb-2"
+                  placeholder="Description" required>{{ reminder.description|default:'' }}</textarea>
+
+        <!--<input type="date"
+               name="reminder_date"
+               class="form-control mb-3"
+               value="{{ reminder.reminder_date|default:'' }}">-->
+        <input type="datetime-local"
+       name="reminder_datetime"
+       class="form-control mb-3"
+       value="{{ reminder.reminder_datetime|date:'Y-m-d\\TH:i' }}"
+       required>
+
+        <button class="btn btn-success">Save</button>
+        <a href="{% url 'reminder_list_usr' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

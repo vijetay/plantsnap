@@ -1,0 +1,45 @@
+{% extends 'base_user.html' %}
+{% block content %}
+
+<div class="container py-5">
+    <!--<h3 class="fw-bold mb-4">USER HOME</h3>-->
+    <h3 class="fw-bold mb-4">Welcome, {{ request.user.username }}</h3>
+   {% if reminders %}
+    <marquee class="bg-warning text-dark p-2 fw-semibold">
+        {% for r in reminders %}
+            🔔 {{ r.title }} on {{ r.reminder_datetime|date:"d M Y, h:i A" }}
+            {% if not forloop.last %}&nbsp;&nbsp;|{% endif %}
+        {% endfor %}
+    </marquee>
+    {% endif %}
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow text-center p-4">
+                <h5 class="fw-bold text-success">Identify Plant</h5>
+                <p class="text-muted">Upload an image to identify plant species</p>
+                <a href="{% url 'identify_plant_usr' %}" class="btn btn-success">Upload Image</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow text-center p-4">
+                <h5 class="fw-bold text-success">Disease Prediction</h5>
+                <p class="text-muted">Upload an image to predict plant diseases</p>
+                <a href="{% url 'predict_dis_usr' %}" class="btn btn-success">Predict Disease</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow text-center p-4">
+                <h5 class="fw-bold text-success">Care Schedule</h5>
+                <p class="text-muted">Plant Care Needs</p>
+                <a href="{% url 'plant_care_usr' %}" class="btn btn-success">View Care</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock content %}

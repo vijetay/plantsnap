@@ -1,0 +1,258 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | PlantSnap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+    body {
+        min-height: 100vh;
+        background:
+            linear-gradient(rgba(245, 247, 246, 0.22), rgba(245, 247, 246, 0.22)),
+            url("https://images.unsplash.com/photo-1501004318641-b39e6451bec6");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+body {
+    background: #f6f8f7;
+}
+
+/* Property tags */
+.tag {
+    background: linear-gradient(135deg, #e6f4ea, #d1f0dc);
+    color: #198754;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin: 2px 4px 2px 0;
+    display: inline-block;
+    font-weight: 500;
+}
+
+/* Action icons */
+.action-bar a {
+    color: #333;
+    font-size: 15px;
+    text-decoration: none;
+}
+.action-bar a:hover {
+    color: #198754;
+}
+
+
+    .card {
+        border-radius: 15px;
+    }
+
+    /* Navbar with garden image */
+    .custom-navbar {
+        min-height: 90px; /* gives image room to breathe */
+
+        background:
+            linear-gradient(
+                rgba(25, 135, 84, 0.1),
+                rgba(25, 135, 84, 0.1)
+            ),
+            url("https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=2560&q=90");
+
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        backdrop-filter: saturate(180%) blur(4px);
+    }
+
+
+
+
+
+    .brand-title {
+        font-size: 3rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+
+
+    /* Responsive adjustment */
+    @media (max-width: 768px) {
+        .brand-title {
+            font-size: 1.5rem;
+        }
+    }
+
+
+
+
+    /* Chatbot styles */
+    .chatbot-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #198754;
+        color: white;
+        border: none;
+        font-size: 26px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        z-index: 1000;
+    }
+
+    .chatbot-box {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 320px;
+        height: 420px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        display: none;
+        flex-direction: column;
+        z-index: 1000;
+    }
+
+    .chatbot-header {
+        background-color: #198754;
+        color: white;
+        padding: 12px;
+        border-radius: 15px 15px 0 0;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .chatbot-body {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        font-size: 14px;
+    }
+
+    .chatbot-footer {
+        padding: 10px;
+        border-top: 1px solid #ddd;
+    }
+
+        .chatbot-reply {
+        white-space: pre-line;   /* preserves \n */
+        word-wrap: break-word;   /* breaks long words */
+        max-width: 100%;
+        display: inline-block;
+    }
+
+</style>
+
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+    <div class="container">
+        <span class="navbar-brand fw-bold brand-title">🌱 PlantSnap</span>
+        <div class="ms-auto">
+             <a href="{% url 'user_home' %}" class="btn btn-light btn-sm">Home</a>
+             <a href="{% url 'change_password_usr' %}" class="btn btn-light btn-sm">Change Password</a>
+            <a href="{% url 'logout' %}" class="btn btn-light btn-sm" onclick="return confirm('Are you sure?')">Logout</a>
+             <a href="{% url 'explore_plant_care' %}" class="btn btn-light btn-sm">Explore</a>
+        </div>
+    </div>
+</nav>
+
+{% block content %}
+{% endblock content %}
+
+
+<!-- Chatbot Button -->
+<button class="chatbot-btn" onclick="toggleChat()">💬</button>
+
+
+<!-- Chatbot Box -->
+<div id="chatbotBox" class="chatbot-box border rounded shadow-sm">
+    <div class="chatbot-header bg-success text-white p-2 fw-bold">
+        🌱 Plant Assistant
+    </div>
+
+    <div class="chatbot-body p-3" id="chatBody" style="height:300px; overflow-y:auto;">
+        <p class="text-muted text-center">
+            Ask me about plant care, watering, fertilizer, or diseases 🌿
+        </p>
+    </div>
+
+    <div class="chatbot-footer p-2">
+        <input type="text"
+               id="chatInput"
+               class="form-control"
+               placeholder="Type your message and press Enter...">
+    </div>
+</div>
+
+
+
+
+<script>
+    function toggleChat() {
+        const chatBox = document.getElementById("chatbotBox");
+        chatBox.style.display = chatBox.style.display === "flex" ? "none" : "flex";
+    }
+</script>
+
+
+<script>
+const input = document.getElementById("chatInput");
+const chatBody = document.getElementById("chatBody");
+
+input.addEventListener("keypress", function (e) {
+    if (e.key === "Enter" && input.value.trim() !== "") {
+        sendMessage(input.value);
+        input.value = "";
+    }
+});
+
+function sendMessage(message) {
+    // User message
+    chatBody.innerHTML += `
+        <div class="text-end mb-2">
+            <span class="badge bg-success">${message}</span>
+        </div>
+    `;
+
+    fetch("{% url 'plant_chatbot_usr' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `message=${encodeURIComponent(message)}`
+    })
+    .then(res => res.json())
+    .then(data => {
+        chatBody.innerHTML += `
+            <div class="text-start mb-2">
+                <span class="badge bg-light text-dark chatbot-reply">
+                    🌱 ${data.reply}
+                </span>
+
+            </div>
+        `;
+        chatBody.scrollTop = chatBody.scrollHeight;
+    });
+}
+</script>
+
+
+{% if messages %}
+  {% for message in messages %}
+        <script>alert('{{ message }}')</script>
+  {% endfor %}
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

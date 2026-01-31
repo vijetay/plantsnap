@@ -1,0 +1,53 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+
+
+<style>
+    body {
+        background-color: #f5f7f6;
+    }
+    .card {
+        border-radius: 15px;
+    }
+</style>
+
+
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">ADMIN HOME</h2>
+    <h3 class="fw-bold mb-4">Welcome, {{ request.user.username }}</h3>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow text-center p-4">
+                <h5 class="fw-bold text-success">Plant Identifications</h5>
+                <p class="text-muted">Plant identifications from input image</p>
+                <a href="{% url 'plant_identif_adm' %}" class="btn btn-success">View</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow text-center p-4">
+                <h5 class="fw-bold text-success">Disease Predictions</h5>
+                <p class="text-muted">Disease predictions from input image</p>
+                <a href="{% url 'plant_dis_adm' %}" class="btn btn-success">View</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow text-center p-4">
+                <h5 class="fw-bold text-success">User Details</h5>
+                <p class="text-muted">Registered users</p>
+                <a href="{% url 'users_adm' %}" class="btn btn-success">View</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% if messages %}
+  {% for message in messages %}
+        <script>alert('{{ message }}')</script>
+  {% endfor %}
+{% endif %}
+
+{% endblock content %}

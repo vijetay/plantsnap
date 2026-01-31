@@ -1,0 +1,70 @@
+{% extends 'base_user.html' %}
+{% block content %}
+
+<div class="container mt-4 mb-5">
+
+    <h4 class="fw-bold text-success mb-4">
+        🌿 Previous Identifications
+    </h4>
+
+    <div class="mb-3">
+        <a href="{% url 'identify_plant_usr' %}"
+           class="btn btn-outline-success">
+            ← Back to Identify Plant
+        </a>
+    </div>
+
+
+    <div class="row g-4">
+
+        {% for plant in plants %}
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <img src="{{ plant.image.url }}"
+                     class="card-img-top"
+                     style="height:220px; object-fit:cover;">
+
+                <div class="card-body">
+                    <h5 class="fw-bold">{{ plant.common_name }}</h5>
+                    <p class="fst-italic text-muted">
+                        {{ plant.scientific_name }}
+                    </p>
+
+                    <p>
+                        <b>Confidence:</b>
+                        {{ plant.confidence }}%
+                    </p>
+
+                    <small class="text-muted">
+                        Identified on {{ plant.uploaded_at|date:"d M Y, h:i A" }}
+                    </small>
+                </div>
+
+                <div class="card-footer bg-white border-0 text-center">
+                    <a href="{% url 'delete_ident_usr' plant.id %}"
+                       class="btn btn-outline-danger btn-sm"
+                       onclick="return confirm('Delete this identification?')">
+                        🗑 Delete
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center mt-5">
+            <div class="alert alert-light shadow-sm d-inline-block px-4 py-3">
+                <strong class="text-dark fs-5">
+                    🌱 No identifications yet
+                </strong>
+                <div class="text-secondary mt-1">
+                    Identify a plant to see it here
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-success">👤 User Management</h3>
+
+        <form method="get" class="d-flex" style="max-width:420px;">
+            <input type="text"
+                   name="q"
+                   value="{{ query }}"
+                   class="form-control me-2"
+                   placeholder="Search username / email">
+            <button class="btn btn-success">Search</button>
+        </form>
+    </div>
+
+    <div class="row g-4">
+
+        {% for u in users %}
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <h5 class="fw-bold mb-1">
+                        {{ u.username }}
+                    </h5>
+
+                    <p class="text-muted mb-1">
+                        {{ u.email|default:"No email" }}
+                    </p>
+
+                    <span class="badge {% if u.is_active %}bg-success{% else %}bg-danger{% endif %}">
+                        {% if u.is_active %}Active{% else %}Blocked{% endif %}
+                    </span>
+
+                    <p class="mt-2 mb-0">
+                        <small class="text-muted">
+                            Joined on {{ u.date_joined|date:"d M Y" }}
+                        </small>
+                    </p>
+
+                </div>
+
+                <div class="card-footer bg-white border-0 text-center">
+
+                    <a href="{% url 'toggle_user_adm' u.id %}"
+                       class="btn btn-sm {% if u.is_active %}btn-warning{% else %}btn-success{% endif %}">
+                        {% if u.is_active %}Block{% else %}Allow{% endif %}
+                    </a>
+
+                    <a href="{% url 'delete_user_adm' u.id %}"
+                       class="btn btn-sm btn-outline-danger"
+                       onclick="return confirm('Remove this user permanently?')">
+                        Remove
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center mt-5">
+            <div class="alert alert-light shadow-sm">
+                <h5>No users found</h5>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

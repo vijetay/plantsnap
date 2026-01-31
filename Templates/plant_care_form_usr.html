@@ -1,0 +1,306 @@
+{% extends 'base_user.html' %}
+{% block content %}
+
+<div class="container mt-4 mb-5">
+    <h4 class="fw-bold text-success">
+        {% if care %}Edit{% else %}Add{% endif %} Plant Care
+    </h4>
+
+    {% with cd=care.care_details %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Basic Info -->
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Basic Information</div>
+            <div class="card-body">
+                <input type="file" name="image" class="form-control mb-2">
+
+                <input type="text" name="common_name" class="form-control mb-2"
+                       placeholder="Common Name" value="{{ care.common_name }}">
+
+                <input type="text" name="scientific_name" class="form-control mb-2"
+                       placeholder="Scientific Name" value="{{ care.scientific_name }}">
+
+                <textarea name="description" class="form-control"
+                          placeholder="Plant description">{{ care.description }}</textarea>
+            </div>
+        </div>
+
+        <!-- Light & Environment -->
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Light & Environment</div>
+            <div class="card-body row g-2">
+                <div class="col-md-6">
+                    <label class="form-label">Light Requirement</label>
+                    <select name="light" class="form-select">
+                        <option>Full sunlight</option>
+                        <option>Partial shade</option>
+                        <option>Indirect light</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Temperature (°C)</label>
+                    <input type="text" name="temperature"
+                           class="form-control"
+                           placeholder="e.g. 18 – 30"
+                           value="{{ cd.temperature|default:'' }}">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Humidity</label>
+                    <select name="humidity" class="form-select">
+                        <option>Low</option>
+                        <option>Moderate</option>
+                        <option>High</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Watering -->
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Watering Schedule</div>
+            <div class="card-body row g-2">
+                <div class="col-md-4">
+                    <label class="form-label">Frequency</label>
+                    <select name="watering_frequency" class="form-select">
+                        <option>Daily</option>
+                        <option>Alternate days</option>
+                        <option>Weekly</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Last Watered Date</label>
+                    <input type="date"
+                           name="last_watered"
+                           class="form-control"
+                           value="{{ cd.watering.last_watered|default:'' }}">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Frequency (Days)</label>
+                    <input type="number"
+                           name="watering_frequency_days"
+                           class="form-control"
+                           placeholder="e.g. 3"
+                           value="{{ cd.watering.frequency_days|default:'' }}">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Quantity</label>
+                    <input type="text" name="watering_quantity"
+                           class="form-control"
+                           placeholder="e.g. 500 ml / 1 liter"
+                           value="{{ cd.watering.quantity|default:'' }}">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Method</label>
+                    <select name="watering_method" class="form-select">
+                        <option>Top</option>
+                        <option>Drip</option>
+                        <option>Spray</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Soil -->
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Soil Details</div>
+            <div class="card-body row g-2">
+                <div class="col-md-6">
+                    <label class="form-label">Soil Type</label>
+                    <input type="text" name="soil_type"
+                           class="form-control"
+                           placeholder="Loamy / Sandy / Well-drained"
+                           value="{{ cd.soil.type|default:'' }}">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">pH Range</label>
+                    <input type="text" name="ph_range"
+                           class="form-control"
+                           placeholder="e.g. 5.5 – 6.8"
+                           value="{{ cd.soil.ph|default:'' }}">
+                </div>
+            </div>
+        </div>
+
+        <!-- Fertilizer -->
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Nutrient / Fertilizer Management</div>
+            <div class="card-body">
+                <input type="text" name="fertilizer_type"
+                       class="form-control mb-2"
+                       placeholder="Fertilizer Type"
+                       value="{{ cd.fertilizer.type|default:'' }}">
+
+                <input type="text" name="fertilizer_composition"
+                       class="form-control mb-2"
+                       placeholder="Composition (NPK etc.)"
+                       value="{{ cd.fertilizer.composition|default:'' }}">
+
+                <input type="text" name="fertilizer_frequency"
+                       class="form-control mb-2"
+                       placeholder="Frequency (e.g. once a month)"
+                       value="{{ cd.fertilizer.frequency|default:'' }}">
+
+                <input type="text" name="fertilizer_method"
+                       class="form-control mb-2"
+                       placeholder="Method (Soil / Foliar)"
+                       value="{{ cd.fertilizer.method|default:'' }}">
+                <label>Last Fertilized Date</label>
+                <input type="date"
+                       name="last_fertilized"
+                       class="form-control mb-2"
+                       value="{{ cd.fertilizer.last_fertilized|default:'' }}">
+
+                <input type="number"
+                       name="fertilizer_frequency_days"
+                       class="form-control"
+                       placeholder="Frequency in days"
+                       value="{{ cd.fertilizer.frequency_days|default:'' }}">
+
+            </div>
+        </div>
+
+        <!-- Maintenance -->
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Maintenance Practices</div>
+            <div class="card-body">
+                <textarea name="pruning" class="form-control mb-2"
+                          placeholder="Pruning details">{{ cd.maintenance.pruning|default:'' }}</textarea>
+
+                <textarea name="weeding" class="form-control mb-2"
+                          placeholder="Weeding details">{{ cd.maintenance.weeding|default:'' }}</textarea>
+
+                <textarea name="mulching" class="form-control mb-2"
+                          placeholder="Mulching details">{{ cd.maintenance.mulching|default:'' }}</textarea>
+
+                <textarea name="support" class="form-control"
+                          placeholder="Support / Staking">{{ cd.maintenance.support|default:'' }}</textarea>
+            </div>
+        </div>
+
+        <!-- Pest & Disease -->
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Pest & Disease Management</div>
+            <div class="card-body">
+                <textarea name="pest_disease" class="form-control"
+                          placeholder="Pest/Disease, Symptoms, Control Measures">{{ cd.pest_disease|default:'' }}</textarea>
+            </div>
+        </div>
+
+        <!-- Seasonal Care -->
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Seasonal Care</div>
+            <div class="card-body">
+                <textarea name="summer_care" class="form-control mb-2"
+                          placeholder="Summer care">{{ cd.seasonal_care.summer|default:'' }}</textarea>
+
+                <textarea name="monsoon_care" class="form-control mb-2"
+                          placeholder="Monsoon care">{{ cd.seasonal_care.monsoon|default:'' }}</textarea>
+
+                <textarea name="winter_care" class="form-control"
+                          placeholder="Winter care">{{ cd.seasonal_care.winter|default:'' }}</textarea>
+            </div>
+        </div>
+
+        <!-- Precautions -->
+        <div class="card mb-4">
+            <div class="card-header fw-semibold">Precautions</div>
+            <div class="card-body">
+                <textarea name="precautions" class="form-control"
+                          placeholder="Handling, chemical usage, environmental precautions">{{ cd.precautions|default:'' }}</textarea>
+            </div>
+        </div>
+
+
+        <!-- Plant Properties -->
+        <div class="card mb-3">
+            <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
+                <span>Plant Properties</span>
+                <button type="button" class="btn btn-sm btn-success" onclick="addProperty()">
+                    + Add
+                </button>
+            </div>
+
+            <div class="card-body" id="propertiesContainer">
+
+                {% if care %}
+                    {% for prop in care.properties.all %}
+                        <div class="input-group mb-2">
+                            <input type="text"
+                                   name="properties"
+                                   class="form-control"
+                                   value="{{ prop.property }}"
+                                   placeholder="e.g. Well-drained soil">
+                            <button type="button"
+                                    class="btn btn-outline-danger"
+                                    onclick="this.parentElement.remove()">
+                                ✖
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if not care %}
+                    <div class="input-group mb-2">
+                                    <input type="text"
+                                           name="properties"
+                                           class="form-control"
+                                           placeholder="e.g. Partial shade">
+                                    <button type="button"
+                                            class="btn btn-outline-danger"
+                                            onclick="this.parentElement.remove()">
+                                        ✖
+                                    </button>
+                                </div>
+                            {% endif %}
+
+            </div>
+        </div>
+
+
+        <!-- Buttons -->
+        <button class="btn btn-success">Save</button>
+        <a href="{% url 'plant_care_usr' %}" class="btn btn-secondary">Cancel</a>
+
+    </form>
+
+    {% endwith %}
+
+
+</div>
+
+
+<script>
+function addProperty() {
+    const container = document.getElementById("propertiesContainer");
+
+    const div = document.createElement("div");
+    div.className = "input-group mb-2";
+
+    div.innerHTML = `
+        <input type="text"
+               name="properties"
+               class="form-control"
+               placeholder="e.g. Slightly acidic soil">
+        <button type="button"
+                class="btn btn-outline-danger"
+                onclick="this.parentElement.remove()">
+            ✖
+        </button>
+    `;
+
+    container.appendChild(div);
+}
+</script>
+
+
+{% endblock %}

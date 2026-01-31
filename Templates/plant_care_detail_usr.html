@@ -1,0 +1,103 @@
+{% extends 'base_user.html' %}
+{% block content %}
+
+<div class="container mt-4 mb-5">
+
+    <a href="{% url 'plant_care_usr' %}"
+       class="btn btn-sm btn-outline-secondary mb-3">
+        ← Back to Plant Care
+    </a>
+
+    <div class="card shadow-lg">
+
+        {% if care.image %}
+        <img src="{{ care.image.url }}"
+             class="card-img-top"
+             style="max-height:350px;object-fit:cover;">
+        {% endif %}
+
+        <div class="card-body">
+
+            <h3 class="fw-bold text-success">{{ care.common_name }}</h3>
+            <h5 class="fst-italic text-muted">{{ care.scientific_name }}</h5>
+
+            <p class="mt-3">{{ care.description }}</p>
+
+            <hr>
+
+            {% if care.care_details %}
+            {% with cd=care.care_details %}
+
+            <!-- 🌞 Light & Climate -->
+            <h5 class="fw-bold text-success mt-4">🌞 Light & Climate</h5>
+            <ul>
+                <li><b>Light:</b> {{ cd.light }}</li>
+                <li><b>Temperature:</b> {{ cd.temperature }}</li>
+                <li><b>Humidity:</b> {{ cd.humidity }}</li>
+            </ul>
+
+            <!-- 💧 Watering -->
+            <h5 class="fw-bold text-primary mt-4">💧 Watering</h5>
+            <ul>
+                <li><b>Frequency:</b> {{ cd.watering.frequency }}</li>
+                <li><b>Quantity:</b> {{ cd.watering.quantity }}</li>
+                <li><b>Method:</b> {{ cd.watering.method }}</li>
+            </ul>
+
+            <!-- 🌱 Soil -->
+            <h5 class="fw-bold text-warning mt-4">🌱 Soil</h5>
+            <ul>
+                <li><b>Type:</b> {{ cd.soil.type }}</li>
+                <li><b>pH Range:</b> {{ cd.soil.ph }}</li>
+            </ul>
+
+            <!-- 🌾 Fertilizer -->
+            <h5 class="fw-bold text-success mt-4">🌾 Fertilizer</h5>
+            <ul>
+                <li><b>Type:</b> {{ cd.fertilizer.type }}</li>
+                <li><b>Composition:</b> {{ cd.fertilizer.composition }}</li>
+                <li><b>Frequency:</b> {{ cd.fertilizer.frequency }}</li>
+                <li><b>Method:</b> {{ cd.fertilizer.method }}</li>
+            </ul>
+
+            <!-- ✂ Maintenance -->
+            <h5 class="fw-bold text-danger mt-4">✂ Maintenance Practices</h5>
+            <ul>
+                <li><b>Pruning:</b> {{ cd.maintenance.pruning }}</li>
+                <li><b>Weeding:</b> {{ cd.maintenance.weeding }}</li>
+                <li><b>Mulching:</b> {{ cd.maintenance.mulching }}</li>
+                <li><b>Support:</b> {{ cd.maintenance.support }}</li>
+            </ul>
+
+            <!-- 🐛 Pest & Disease -->
+            <h5 class="fw-bold mt-4">🐛 Pest & Disease</h5>
+            <p>{{ cd.pest_disease }}</p>
+
+            <!-- 🍂 Seasonal Care -->
+            <h5 class="fw-bold text-info mt-4">🍂 Seasonal Care</h5>
+            <ul>
+                <li><b>Summer:</b> {{ cd.seasonal_care.summer }}</li>
+                <li><b>Monsoon:</b> {{ cd.seasonal_care.monsoon }}</li>
+                <li><b>Winter:</b> {{ cd.seasonal_care.winter }}</li>
+            </ul>
+
+            <!-- ⚠ Precautions -->
+            <h5 class="fw-bold text-danger mt-4">⚠ Precautions</h5>
+            <p>{{ cd.precautions }}</p>
+
+            {% endwith %}
+            {% endif %}
+
+            <hr>
+
+            <small class="text-muted">
+                Uploaded on {{ care.uploaded_at|date:"d M Y, h:i A" }}
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

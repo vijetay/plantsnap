@@ -1,0 +1,51 @@
+{% extends 'base_user.html' %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold text-success">🔔 My Reminders</h4>
+        <a href="{% url 'reminder_add_usr' %}" class="btn btn-success btn-sm">
+            + Add Reminder
+        </a>
+
+          <a href="{% url 'plant_care_usr' %}" class="btn btn-success btn-sm">
+            Back to Plant Care
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-success">
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th width="120">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in reminders %}
+            <tr>
+                <td>{{ r.title }}</td>
+                <td>{{ r.description }}</td>
+                <td>{{ r.reminder_datetime|date:"d M Y, h:i A" }}</td>
+
+                <td>
+                    <a href="{% url 'reminder_edit_usr' r.id %}"
+                       class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'reminder_delete_usr' r.id %}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Delete reminder?')">
+                       ✖
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">No reminders added</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

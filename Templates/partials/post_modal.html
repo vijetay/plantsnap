@@ -1,0 +1,62 @@
+<div class="modal fade" id="post{{ p.id }}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-body">
+
+                <!-- IMAGE -->
+                <div class="text-center mb-3">
+                    <img src="{{ p.image.url }}"
+                         class="img-fluid rounded"
+                         style="max-height:320px;object-fit:cover;">
+                </div>
+
+                <!-- USER -->
+                <p class="fw-bold mb-0">{{ p.reg.user.username }}</p>
+                <small class="text-muted">{{ p.reg.user.email }}</small>
+
+                <hr>
+
+                <!-- DETAILS -->
+                <h4 class="fw-bold text-success">{{ p.common_name }}</h4>
+                <h6 class="fst-italic text-muted">{{ p.scientific_name }}</h6>
+                <p>{{ p.description }}</p>
+
+                <!-- PROPERTY TAGS -->
+                <div class="mb-2">
+                    {% for prop in p.properties.all %}
+                        <span class="tag">{{ prop.property }}</span>
+                    {% endfor %}
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="d-flex justify-content-around border-top pt-2 mt-3">
+                    <a href="{% url 'toggle_like' p.id %}">❤️ {{ p.likes.count }}</a>
+                    <a href="{% url 'toggle_save' p.id %}">🔖 {{ p.saves.count }}</a>
+                </div>
+
+                <!-- COMMENTS -->
+                <hr>
+                <h6 class="fw-bold">💬 {{ p.comments.count }} Comments</h6>
+
+                <form method="post" action="{% url 'add_comment' p.id %}">
+                    {% csrf_token %}
+                    <textarea class="form-control mb-2"
+                              name="comment"
+                              placeholder="Add a comment..."
+                              required></textarea>
+                    <button class="btn btn-success btn-sm">Post</button>
+                </form>
+
+                {% for c in p.comments.all %}
+                    <p class="mt-2">
+                        <b>{{ c.reg.user.username }}</b> {{ c.comment }}
+                    </p>
+                {% empty %}
+                    <p class="text-muted">No comments yet</p>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>
