@@ -1,0 +1,5 @@
+tf_env/
+venv/
+__pycache__/
+.env
+*.sqlite3
